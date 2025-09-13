@@ -1,5 +1,29 @@
 return {
 	{
+		"folke/todo-comments.nvim",
+		dependencies = {
+			{ "nvim-lua/plenary.nvim" },
+			{ "echasnovski/mini.icons" },
+		},
+		opts = {},
+	},
+	{
+		{
+			"folke/which-key.nvim",
+			event = "VeryLazy",
+			opts = {},
+			keys = {
+				{
+					"<leader>?",
+					function()
+						require("which-key").show({ global = false })
+					end,
+					desc = "Buffer Local Keymaps (which-key)",
+				},
+			},
+		},
+	},
+	{
 		"mistricky/codesnap.nvim",
 		build = "make",
 		keys = {
@@ -25,14 +49,13 @@ return {
 			},
 			{
 				"<F2>",
-				function ()
+				function()
 					vim.cmd("Stdheader")
 				end,
-				desc = "Adds the 42 header"
-			}
+				desc = "Adds the 42 header",
+			},
 		},
 		opts = {
-			auto_update = false,
 			default_map = false,
 			auto_update = false,
 			user = "tmalkawi",

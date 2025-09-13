@@ -1,24 +1,32 @@
+---@source https://github.com/folke/lazydev.nvim
 return {
 	{
-		"williamboman/mason.nvim",
+		"folke/lazydev.nvim",
+		ft = "lua",
 		opts = {
-			ui = {
-				border = "rounded",
-				icons = {
-					package_installed = "",
-					package_uninstalled = "",
-					package_pending = "",
-				}
-			}
+			library = {
+				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+			},
 		},
 	},
 	{
 		"neovim/nvim-lspconfig",
 		event = { "BufNewFile", "BufReadPre", "BufReadPost" },
-		config = function()
+		opts = {
+			servers = { "clangd", "pyright", "lua_ls", "ts_ls", "jsonls" },
+		},
+		config = function(_, opts)
+			opts = opts or {}
 			local capabilities = require("blink-cmp").get_lsp_capabilities()
-			vim.lsp.enable("clangd")
-			vim.lsp.enable("pyright")
+
+			if opts.servers == nil then
+				return print("Error: No configured LSP servers")
+			end
+
+			vim.lsp.enable(opts.servers)
+			vim.lsp.config("*", { capabilities = capabilities })
+			vim.diagnostic.config({ virtual_text = true })
+
 			vim.lsp.config("lua_ls", {
 				capabilities = capabilities,
 				on_init = function(client)
@@ -38,31 +46,11 @@ return {
 						},
 					})
 				end,
+				settings = {
+					Lua = {},
+				},
 			})
-			vim.lsp.config("*", { capabilities = capabilities })
-			vim.diagnostic.config({ virtual_text = true })
 		end,
-	},
-	{
-		"stevearc/conform.nvim",
-		keys = {
-			{
-				"<C-f>",
-				function()
-					require("conform").format({
-						bufnr = vim.api.nvim_get_current_buf(),
-					})
-				end,
-				desc = "Prettify a file",
-			},
-		},
-		opts = {
-			formatters_by_ft = {
-				lua = { "stylua" },
-				c = { "clang-format" },
-				python = { "autopep8" },
-			},
-		},
 	},
 	{
 		"hardyrafael17/norminette42.nvim",
@@ -70,7 +58,7 @@ return {
 			runOnSave = true,
 			maxErrorsToShow = 5,
 			active = true,
-		}
+		},
 	},
 	{
 		"mfussenegger/nvim-lint",
@@ -83,6 +71,7 @@ return {
 				lua = { "luacheck" },
 				c = { "cpplint" },
 				python = { "mypy" },
+				typescript = { "eslint_d" },
 			}
 		end,
 	},

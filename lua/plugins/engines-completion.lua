@@ -1,5 +1,15 @@
 return {
 	{
+		"hrsh7th/nvim-cmp",
+		opts = function(_, opts)
+			opts.sources = opts.sources or {}
+			table.insert(opts.sources, {
+				name = "lazydev",
+				group_index = 0,
+			})
+		end,
+	},
+	{
 		"saghen/blink.cmp",
 		dependencies = {
 			"rafamadriz/friendly-snippets",
@@ -14,6 +24,11 @@ return {
 			cmdline = {
 				keymap = {
 					preset = "cmdline",
+					["<C-space>"] = {
+						function(cmp)
+							cmp.show({ providers = { "property" } })
+						end,
+					},
 				},
 				enabled = true,
 				completion = {

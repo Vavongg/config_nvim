@@ -3,12 +3,23 @@ return {
 		"akinsho/bufferline.nvim",
 		version = "*",
 		dependencies = "nvim-tree/nvim-web-devicons",
+
+		---@type bufferline.UserConfig
 		opts = {
 			options = {
 				modified_icon = "󰄛",
 				separator_style = "slant",
 			},
 		},
+		config = function(_, opts)
+			opts = opts or {}
+			local bufferline = require("bufferline")
+			local highlights = require("catppuccin.groups.integrations.bufferline").get_theme()
+
+			bufferline.setup({
+				highlights = highlights,
+			})
+		end,
 	},
 	{
 		"stevearc/oil.nvim",
@@ -34,7 +45,21 @@ return {
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
+
+		---@module "noice.config"
 		opts = {
+			routes = {
+				{
+					filter = { event = "msg_show", kind = "shell_out" },
+					view = "notify",
+					opts = { level = "info", title = "stdout" },
+				},
+				{
+					filter = { event = "msg_show", kind = "shell_err" },
+					view = "notify",
+					opts = { level = "error", title = "stderr" },
+				},
+			},
 			lsp = {
 				override = {
 					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -67,6 +92,13 @@ return {
 		cmd = { "NvimTreeOpen" },
 		keys = {
 			{ "<leader>to", "<CMD>NvimTreeOpen<CR>", desc = "opens tree file explorer" },
+			{
+				"<leader>tc",
+				function()
+					return vim.cmd("NvimTreeClose")
+				end,
+				desc = "closes the tree file explorer",
+			},
 		},
 		opts = {
 			renderer = {
@@ -91,17 +123,32 @@ return {
 			strict = true,
 			override_by_extension = {
 				["c"] = {
-					icon = "",
+					icon = "",
 					color = "#5c6bc0",
-					name = "c",
+					name = "Clang",
 				},
 				["h"] = {
-					icon = "",
+					icon = "",
 					color = "#A020F0",
-					name = "H",
+					name = "CHeader",
+				},
+				["cpp"] = {
+					icon = "",
+					color = "#5c6bc0",
+					name = "Cpplang",
+				},
+				["hpp"] = {
+					icon = "",
+					color = "#A020F0",
+					name = "CppHeader",
+				},
+				["o"] = {
+					icon = "",
+					color = "#cfcfc4",
+					name = "Objectfiles",
 				},
 				["json"] = {
-					icon = "",
+					icon = "",
 					color = "#e67f19",
 					name = "JSON",
 				},
@@ -111,6 +158,11 @@ return {
 					icon = "",
 					color = "#A8CD89",
 					name = "Makefile",
+				},
+				["*"] = {
+					icon = "",
+					color = "#FFB26F",
+					name = "executables",
 				},
 			},
 		},
