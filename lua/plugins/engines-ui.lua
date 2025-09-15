@@ -23,6 +23,7 @@ return {
 	},
 	{
 		"stevearc/oil.nvim",
+		enabled = false,
 		lazy = false,
 		dependencies = {
 			{ "nvim-tree/nvim-web-devicons", opts = {} },
@@ -89,6 +90,7 @@ return {
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
+		lazy = false,
 		cmd = { "NvimTreeOpen" },
 		keys = {
 			{ "<leader>to", "<CMD>NvimTreeOpen<CR>", desc = "opens tree file explorer" },
