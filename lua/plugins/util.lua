@@ -58,8 +58,8 @@ return {
 		opts = {
 			default_map = false,
 			auto_update = false,
-			user = "tmalkawi",
-			mail = "marvin@42.fr",
+			user = "ainthana",
+			mail = "ainthana@42.fr",
 		},
 	},
 	{
